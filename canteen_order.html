@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAC Canteen Order Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c5282;
+            --secondary-color: #f6ad55;
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --light-bg: #f7fafc;
+            --border-color: #cbd5e0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a365d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a365d 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        form {
+            padding: 40px 30px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error-color);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: #edf2f7;
+            border-color: var(--primary-color);
+        }
+
+        .menu-item input[type="checkbox"] {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .menu-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .menu-item-name {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .menu-item-price {
+            display: block;
+            font-size: 13px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-category {
+            margin-bottom: 25px;
+        }
+
+        .menu-category h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .order-summary {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid var(--border-color);
+            padding-top: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .payment-info {
+            background: #edf2f7;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        .payment-info strong {
+            color: var(--primary-color);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a365d 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(44, 82, 130, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            flex: 1;
+        }
+
+        .btn-reset:hover {
+            background: var(--light-bg);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--error-color);
+        }
+
+        .success-message {
+            display: none;
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--success-color);
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .dietary-note {
+            background: #fff5e6;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary-color);
+            font-size: 13px;
+            color: #7c2d12;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 25px 20px;
+            }
+
+            header {
+                padding: 30px 20px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-submit,
+            .btn-reset {
+                flex: 1;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid var(--light-bg);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">🍽️</div>
+            <h1>MAC Canteen Order</h1>
+            <p>Order food for your child's recess</p>
+        </header>
+
+        <form id="canteeForm">
+            <div class="success-message" id="successMessage">
+                ✓ Order submitted successfully! Check your email for the payment link.
+            </div>
+
+            <!-- PARENT INFORMATION -->
+            <div class="form-section">
+                <h2><span class="section-icon">👤</span> Parent Information</h2>
+
+                <div class="form-group">
+                    <label for="parentName" class="required">Your Full Name</label>
+                    <input type="text" id="parentName" name="parentName" placeholder="John Smith" required>
+                    <span class="error-message">Please enter your full name</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentEmail" class="required">Your Email</label>
+                    <input type="email" id="parentEmail" name="parentEmail" placeholder="john@example.com" required>
+                    <span class="error-message">Please enter a valid email address</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentPhone" class="required">Your Phone Number</label>
+                    <input type="tel" id="parentPhone" name="parentPhone" placeholder="03 9999 9999" required>
+                    <span class="error-message">Please enter your phone number</span>
+                </div>
+            </div>
+
+            <!-- STUDENT SELECTION -->
+            <div class="form-section">
+                <h2><span class="section-icon">👧</span> Student Details</h2>
+
+                <div class="form-group">
+                    <label for="studentClass" class="required">Student Class</label>
+                    <select id="studentClass" name="studentClass" required>
+                        <option value="">Select class...</option>
+                        <option value="Prep">Prep</option>
+                        <option value="Year 1">Year 1</option>
+                        <option value="Year 2">Year 2</option>
+                        <option value="Year 3">Year 3</option>
+                        <option value="Year 4">Year 4</option>
+                        <option value="Year 5">Year 5</option>
+                        <option value="Year 6">Year 6</option>
+                        <option value="Year 7">Year 7</option>
+                        <option value="Year 8">Year 8</option>
+                        <option value="Year 9">Year 9</option>
+                    </select>
+                    <span class="error-message">Please select a class</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentName" class="required">Student Name</label>
+                    <select id="studentName" name="studentName" required>
+                        <option value="">Select a class first</option>
+                    </select>
+                    <span class="error-message">Please select a student name</span>
+                </div>
+            </div>
+
+            <!-- MENU SELECTION -->
+            <div class="form-section">
+                <h2><span class="section-icon">🍕</span> Order Items</h2>
+                <p style="font-size: 13px; color: var(--text-light); margin-bottom: 20px;">Check the box next to items you want to order. Prices shown are per item.</p>
+
+                <!-- SANDWICHES, WRAPS & BURGERS -->
+                <div class="menu-category">
+                    <h3>Sandwiches, Wraps & Burgers (Daily)</h3>
+                    <div class="menu-grid" id="menuSandwiches"></div>
+                </div>
+
+                <!-- DAILY SPECIALS -->
+                <div class="menu-category">
+                    <h3>Daily Specials</h3>
+                    <p style="font-size: 12px; color: var(--text-light); margin-bottom: 12px;">Available on specific days - check which day you're ordering for!</p>
+                    <div class="menu-grid" id="menuSpecials"></div>
+                </div>
+
+                <!-- SALAD BOWLS -->
+                <div class="menu-category">
+                    <h3>Salad Bowls (Daily)</h3>
+                    <div class="menu-grid" id="menuSalads"></div>
+                </div>
+
+                <!-- SIDES & NIBBLES -->
+                <div class="menu-category">
+                    <h3>Sides & Nibbles (Daily)</h3>
+                    <div class="menu-grid" id="menuSides"></div>
+                </div>
+
+                <!-- DESSERTS -->
+                <div class="menu-category">
+                    <h3>Desserts (Daily)</h3>
+                    <div class="menu-grid" id="menuDesserts"></div>
+                </div>
+
+                <!-- DRINKS -->
+                <div class="menu-category">
+                    <h3>Drinks (Daily)</h3>
+                    <div class="menu-grid" id="menuDrinks"></div>
+                </div>
+            </div>
+
+            <!-- DIETARY REQUIREMENTS -->
+            <div class="form-section">
+                <h2><span class="section-icon">⚠️</span> Dietary Requirements (Optional)</h2>
+                <div class="form-group">
+                    <label for="dietary">Any allergies, dietary needs, or special instructions?</label>
+                    <textarea id="dietary" name="dietary" placeholder="e.g., Allergic to nuts, no cheese, etc."></textarea>
+                    <div class="dietary-note">
+                        ⚠️ Important: The canteen staff will review your dietary requirements. Please be as specific as possible.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDER SUMMARY -->
+            <div class="order-summary">
+                <h3 style="margin-bottom: 15px; color: var(--primary-color);">Order Summary</h3>
+                <div id="orderSummary">
+                    <div class="summary-row">
+                        <span>Items selected:</span>
+                        <strong id="itemCount">0</strong>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="totalPrice">$0.00</span>
+                    </div>
+                </div>
+                <div class="payment-info">
+                    <strong>📋 Next Step:</strong> After submitting this form, you'll receive an email with your order summary and a <strong>Stripe payment link</strong>. Payment must be completed within 24 hours for your order to be processed.
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="button-group">
+                <button type="reset" class="btn-reset">Clear Form</button>
+                <button type="submit" class="btn-submit">Submit Order</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Submitting your order...</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Student data by class (all 195 students from StudentList.csv)
+        const studentsByClass = {
+            'Prep': ['Aaron Atharr Sjahric', 'Adam El chakik', 'Alisha mohammad', 'Amirah Warrun', 'Ammar Ahmed zubedi', 'Aysha Ansari', 'Hafsah Mohamed Nashraf', 'Hud Abdel-', 'Inayah Khan', 'Jenna Youssef', 'Kidung Kalimasada', 'Liya (LIYA) Mohamed Azry', 'Muhammad Muslim', 'Rabia Muhammad', 'Sarah Khalifullah', 'Talia (talia) Hussain', 'Yasmin Harmouche', 'Zaigham Rabbi', 'Zohan HOSSAIN'],
+            'Year 1': ['Abdallah (Umar) Mohamued', 'Ali Ahmed zubedi', 'Anabia KIYANI', 'Arwa Alam', 'Dzejla Ekic', 'EMAN ALOQAILY', 'Geubrina Ammara (Khawla) Khawla', 'Khubaib Asad', 'Mian Muhammad Hasaan (Hasaan) Rafi', 'Mishal Ayaz', 'Muhammad (Hasnain) Hasnain', 'Muhammad (Shahran) Shahran', 'Muhammad Abdel-Hafiz', 'Muhammad Hamzeh', 'Nadia Younes', 'Nashrah Shaikh', 'SAFA ZAHRA BANU TINDUKAL SULTAN', 'Sufyan Oluwadarasimi (Sufyan) Fatokun', 'TETSUYA YAMASHITA (TETSUYA) GHIBERTI'],
+            'Year 2': ['Aadham (Aadham Ilmy) AZAR', 'Ali Alkhudairy', 'Anam Fatima (Anam) Syeda', 'Arsla Ahmed', 'Az-Zakiyyah Binte (Zakiyyah) Muhammad Suhaimi', 'Azalea MANGGABARANI', 'Eman El Houli', 'Haaniya SALABAT', 'Inaaya ABBAS', 'Khazin Roshaan (Khazin) Khalid', 'Layla WARRUN', 'Maryam Jama', 'Meerab Fatima AZM', 'Mohamed TALEB', 'Muhammad Ahmad ANSARI', 'Muhammad Ibrahim', 'Muhammad Muhib AHMAD', 'Musa HASSAN', 'Niall HAMMAD', 'Umar MUHAMMAD', 'Yacoub EL CHAKIK', 'Zulfiqar MIN'],
+            'Year 3': ['Adalynn Ida (Addie) Vann-Schultz', 'Aleeza Faizan', 'Ali Bhatti', 'Ayesha RABBI', 'Edin Omerovic', 'Habil MOHAMMADI', 'Leen ALOQAILY', 'Maryam MOHAMUED', 'Mikael MUSTAFA', 'Moattar Asim MIR', 'Mohamed Jama', 'Mohammad (Athallah) (Athallah) ZUHDI', 'Muhammad (Mohamed) NASHRAF', 'Muhammad Omar Zidan', 'Muhammad Rayyan Rafi', 'Muhammed Hamza  SYED', 'Rohaan SALABAT', 'Sabiha HOSSAIN', 'Zahra Hoorain ABBAS', 'Zayd Chahrouk'],
+            'Year 4': ['Aaliyah Elsibai', 'Adam AWOLE', 'Ali HAIDER', 'Elia Hamzeh', 'Faiza Ahmed', 'Hoorain Rasool', 'Ifrah HASSAN', 'Iliyas ABDULMALIK-RILEY', 'Khalifa Mohamed', 'LABIB EBRAHIM', 'Maryam Ahsan', 'Mira HARMOUCHE', 'Miraal BILAL', 'Mohammad Alkhudairy', 'Muhammad Hashir', 'Muhammad Saifullah Bin (Saifullah) Muhammad Suhaimi', 'Muhammed (Muhammed Aadham) Aadham', 'Musa MIR', 'Sajaa ALI', 'Yusra SHAIKH', 'ZARMEENA Ayaz'],
+            'Year 5': ['Aiza ABID', 'Ameen Alam', 'Ayadh AZRY', 'Eyad GEBRIL', 'Hafsa Hasan Arbab', 'Hamad SYED', 'Haroun Ilmy AZAR', 'Iman AZAD', 'Jayden Ibrahim SJAHRIC', 'Manha AFRIDI', 'Muhammad RAAHIM', 'Muhammad Sohail', 'Puteri (Puteri Saidatuzzahrah) MAT YASSIN', 'Rakata JALANUSA', 'Suaad FATOKUN', 'Tasnim SHARMIN', 'Tazkia SHARMIN', 'Umar MUBEEN', 'Yaqob Jama'],
+            'Year 6': ['ADAM TALEB', 'ARMAN Bacha', 'Aaminah Asim MIR', 'Abdia  MIN', 'Ajwa Ahmed Rasheed', 'Aleen AL ARTOUFI', 'Alishba Binte HASSAN', 'Aminah ABDULMALIK-RILEY', 'Aroush AFRIDI', 'Ashna Alam', 'INAAYA HOSSAIN', 'Lina El Houli', 'Malak HARMOUCHE', 'Mubeen MIR', 'Muhammad ABDULLAH', 'Muhammad Minhal HAIDER', 'Nabeki ABAGERO', 'Omar MOHAMMADI', 'Saad SYED', 'Salih Abdel', 'Summer Alkhudairy', 'Umayma FATIMA', 'Zainab SHAIKH'],
+            'Year 7': ['Abdul Basit AHMAD', 'Adil Ahmed', 'Amir Chahrouk', 'Ariba ABID', 'Ariz Mohamad Hamdan', 'Ayla OMEROVIC', 'Azzahra MANGGABARANI', 'Eve Fraser', 'FATIMA UDDIN', 'Ihsan Eisa KHAN', 'Madina Abdulmalik-Riley', 'Maha HARMOUCHE', 'Mariam El houli', 'Mariyam FATIMA', 'Muhammad Adil Nur', 'Muhammad Khairullah Bin (Khairullah) Muhammad Suhaimi', 'Omar ABDULSAMAD', 'Rahmo Jama', 'Reis Huseyin', 'Richelle Clarissa SJAHRIC', 'Samira Elsibai', 'Yuunus FATOKUN', 'ZARYAB Bacha'],
+            'Year 8': ['AHMAD MURANOVIC', 'Abdul Haseeb AHMAD', 'Afifa FATIMA', 'Aljia (Zayneb) Kid', 'Amira Nur', 'Arfa Asim (Arfa) MIR', 'Cedra BOSTANI', 'Hesam MOHAMMADI', 'Mohammed Abubakar  KHAN', 'Musa Ilmy AZAR', 'Qamar Alkhudairy', 'Retaj Mohamed (Retaj) Abdelaziz', 'Safiyyah HOSSAIN', 'Shah  Nazeer Uddin (Aqib) Syed', 'Zarien HAIDER'],
+            'Year 9': ['Amana AWOLE', 'Amirah KHAN', 'Fetimah EL SIBAI', 'Hajira Hasan Arbab', 'Ibrahim MUBEEN', 'Imran MOHAMED', 'Jibraan Isaacs', 'Mounira El houli', 'Muneeb MIR', 'Noor FATIMA', 'Rayaan JAMA', 'Sakinah SHAIKH', 'Sumaya ALI', 'Yusroh FATOKUN']
+        };
+
+        // Menu items with prices
+        const menuItems = {
+            'sandwiches': [
+                { name: 'Zaatar', price: 3.00 },
+                { name: 'Zaatar with veggies', price: 8.00 },
+                { name: 'Tuna sandwich', price: 8.00 },
+                { name: 'Peri peri chicken sandwich', price: 6.00 },
+                { name: 'Veg burger', price: 8.00 },
+                { name: 'Hommus', price: 7.50 },
+                { name: 'Falafel wrap', price: 8.00 },
+                { name: 'Peri peri chicken wrap', price: 8.00 },
+                { name: 'Chicken schnitzel wrap', price: 8.50 },
+                { name: 'Chicken schnitzel burger', price: 8.50 },
+                { name: 'Beef burger', price: 7.50 }
+            ],
+            'specials': [
+                { name: 'Monday: Hommus pizza slice', price: 7.50 },
+                { name: 'Tuesday: Spaghetti Bolognese pasta', price: 9.00 },
+                { name: 'Wednesday: Chicken Biryani', price: 8.50 },
+                { name: 'Thursday: Chicken Biryani', price: 8.50 },
+                { name: 'Friday: Chicken Biryani', price: 8.50 }
+            ],
+            'salads': [
+                { name: 'Fruit salad', price: 7.20 },
+                { name: 'Greek salad', price: 6.00 },
+                { name: 'Garden salad', price: 6.00 },
+                { name: 'Chicken salad', price: 8.00 },
+                { name: 'Tuna & egg salad', price: 7.00 }
+            ],
+            'sides': [
+                { name: 'Nuggets (5 pcs)', price: 3.00 },
+                { name: 'Fries (small)', price: 3.00 },
+                { name: 'Fries (half)', price: 3.80 },
+                { name: 'Fries (full)', price: 9.50 },
+                { name: 'Garlic bread (half)', price: 3.50 },
+                { name: 'Garlic bread (full)', price: 4.50 },
+                { name: 'Spring rolls', price: 5.00 },
+                { name: 'Tomato sauce', price: 0.50 },
+                { name: 'BBQ sauce', price: 0.50 }
+            ],
+            'desserts': [
+                { name: 'Chocolate muffin', price: 4.00 },
+                { name: 'Mixed berry muffin', price: 4.00 },
+                { name: 'Banana bread', price: 4.50 },
+                { name: 'Croissant w/ butter', price: 4.00 },
+                { name: 'Croissant w/ jam', price: 4.00 },
+                { name: 'Croissant w/ cheese & tomato', price: 5.00 }
+            ],
+            'drinks': [
+                { name: 'Fruit juice', price: 3.00 },
+                { name: 'Water bottle', price: 3.80 }
+            ]
+        };
+
+        let selectedItems = {};
+
+        // Initialize form
+        function initForm() {
+            renderMenuItems('sandwiches', 'menuSandwiches');
+            renderMenuItems('specials', 'menuSpecials');
+            renderMenuItems('salads', 'menuSalads');
+            renderMenuItems('sides', 'menuSides');
+            renderMenuItems('desserts', 'menuDesserts');
+            renderMenuItems('drinks', 'menuDrinks');
+
+            document.getElementById('studentClass').addEventListener('change', updateStudentNames);
+            document.getElementById('canteeForm').addEventListener('submit', handleSubmit);
+
+            // Update total on change
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateTotal);
+            });
+        }
+
+        function renderMenuItems(category, elementId) {
+            const container = document.getElementById(elementId);
+            const items = menuItems[category];
+
+            container.innerHTML = items.map((item, idx) => `
+                <div class="menu-item">
+                    <input type="checkbox" id="${category}_${idx}" value="${item.name}" data-price="${item.price}" data-category="${category}">
+                    <label for="${category}_${idx}">
+                        <span class="menu-item-name">${item.name}</span>
+                        <span class="menu-item-price">$${item.price.toFixed(2)}</span>
+                    </label>
+                </div>
+            `).join('');
+
+            // Add event listeners
+            document.querySelectorAll(`#${elementId} input[type="checkbox"]`).forEach(checkbox => {
+                checkbox.addEventListener('change', updateTotal);
+            });
+        }
+
+        function updateStudentNames() {
+            const selectedClass = document.getElementById('studentClass').value;
+            const selectElement = document.getElementById('studentName');
+
+            selectElement.innerHTML = '';
+
+            if (!selectedClass) {
+                selectElement.innerHTML = '<option value="">Select a class first</option>';
+                return;
+            }
+
+            const students = studentsByClass[selectedClass] || [];
+            students.sort().forEach(student => {
+                const option = document.createElement('option');
+                option.value = student;
+                option.textContent = student;
+                selectElement.appendChild(option);
+            });
+        }
+
+        function updateTotal() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let total = 0;
+            let itemCount = 0;
+
+            checkboxes.forEach(checkbox => {
+                const price = parseFloat(checkbox.getAttribute('data-price'));
+                total += price;
+                itemCount++;
+            });
+
+            document.getElementById('itemCount').textContent = itemCount;
+            document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+
+            // Store selected items
+            selectedItems = {};
+            checkboxes.forEach(checkbox => {
+                const category = checkbox.getAttribute('data-category');
+                if (!selectedItems[category]) {
+                    selectedItems[category] = [];
+                }
+                selectedItems[category].push({
+                    name: checkbox.value,
+                    price: parseFloat(checkbox.getAttribute('data-price'))
+                });
+            });
+        }
+
+        function validateForm() {
+            const form = document.getElementById('canteeForm');
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                const formGroup = field.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+
+                if (!field.value.trim()) {
+                    isValid = false;
+                    formGroup.classList.add('error');
+                    if (errorMessage) errorMessage.classList.add('show');
+                } else {
+                    formGroup.classList.remove('error');
+                    if (errorMessage) errorMessage.classList.remove('show');
+                }
+            });
+
+            // Check if items selected
+            if (Object.keys(selectedItems).length === 0) {
+                const menuSection = form.querySelector('.form-section:nth-of-type(4)');
+                alert('Please select at least one item to order');
+                return false;
+            }
+
+            return isValid;
+        }
+
+        function formatOrderItems() {
+            let formatted = '';
+            for (const category in selectedItems) {
+                formatted += '\n' + category.toUpperCase() + ':\n';
+                selectedItems[category].forEach(item => {
+                    formatted += `  - ${item.name}: $${item.price.toFixed(2)}\n`;
+                });
+            }
+            return formatted;
+        }
+
+        function getOrderTotal() {
+            let total = 0;
+            for (const category in selectedItems) {
+                selectedItems[category].forEach(item => {
+                    total += item.price;
+                });
+            }
+            return total.toFixed(2);
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.querySelector('.btn-submit').disabled = true;
+
+            try {
+                // Get form data
+                const formData = {
+                    parentName: document.getElementById('parentName').value,
+                    parentEmail: document.getElementById('parentEmail').value,
+                    parentPhone: document.getElementById('parentPhone').value,
+                    studentClass: document.getElementById('studentClass').value,
+                    studentName: document.getElementById('studentName').value,
+                    items: selectedItems,
+                    dietary: document.getElementById('dietary').value,
+                    total: getOrderTotal(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Log to console (for debugging)
+                console.log('Order submitted:', formData);
+
+                // Here you would normally send to your backend
+                // For now, we'll simulate success
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Show success message
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('canteeForm').reset();
+
+                // Reset form state
+                selectedItems = {};
+                updateTotal();
+                updateStudentNames();
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Error submitting order. Please try again.');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                document.querySelector('.btn-submit').disabled = false;
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initForm);
+    </script>
+</body>
+</html>
